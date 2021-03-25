@@ -28,10 +28,11 @@ export default class NearSwapProvider extends Provider {
   async initiateSwap (value, recipientAddress, refundAddress, secretHash, expiration, gasPrice) {
     const bytecode = this.createSwapScript()
     const contractId = this.generateUniqueString()
+    const valueParsed = value ? value.toLocaleString('fullwide', { useGrouping: false }) : value
 
     return this.getMethod('sendTransaction')(contractId, null, [
       transactions.createAccount(),
-      transactions.transfer(value),
+      transactions.transfer(valueParsed),
       transactions.deployContract(bytecode),
       transactions.functionCall(
         ABI.init.method,

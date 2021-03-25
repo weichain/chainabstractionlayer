@@ -55,11 +55,12 @@ export default class NearJsWalletProvider extends Provider {
   }
 
   async sendTransaction (to, value, actions) {
+    const valueParsed = value ? value.toLocaleString('fullwide', { useGrouping: false }) : value
     const addresses = await this.getAddresses()
     const from = await this.getMethod('getAccount')(addressToString(addresses[0]), this.getSigner())
 
     if (!actions) {
-      actions = [transfer(value)]
+      actions = [transfer(valueParsed)]
     }
 
     const tx = await from.signAndSendTransaction(addressToString(to), actions)
